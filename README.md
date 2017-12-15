@@ -6,7 +6,7 @@ ant design 2.x 里的 landing page.
 
 ## preview
 
-https://ant-motion.github.io/ant-v-landing-page/
+https://ant-motion.github.io/ant-design-2.x-landing-page/
 
 
 ## install
