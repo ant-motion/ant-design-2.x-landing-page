@@ -1,50 +1,92 @@
 import React from 'react';
-import { Row, Col, Icon, Menu, Button, Popover } from 'antd';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { Menu, Row, Col, Icon, Button, Popover, Badge } from 'antd';
 
-import { enquireScreen } from 'enquire-js';
 
-const LOGO_URL = 'https://gw.alipayobjects.com/zos/rmsportal/gVAKqIsuJCepKNbgbSwE.svg';
+const searchEngine = 'Google';
 
-class Header extends React.Component {
+export default class Header extends React.Component {
+  static propTypes = {
+    isFirstScreen: PropTypes.bool,
+    isMoblie: PropTypes.bool,
+  }
   state = {
     menuVisible: false,
-    menuMode: 'horizontal',
   };
-
-  componentDidMount() {
-    enquireScreen((b) => {
-      this.setState({ menuMode: b ? 'inline' : 'horizontal' });
+  onMenuVisibleChange = (visible) => {
+    this.setState({
+      menuVisible: visible,
+    });
+  }
+  handleShowMenu = () => {
+    this.setState({
+      menuVisible: true,
     });
   }
 
-  render() {
-    const { menuMode, menuVisible } = this.state;
+  handleHideMenu = () => {
+    this.setState({
+      menuVisible: false,
+    });
+  }
 
-    const menu = (
-      <Menu mode={menuMode} id="nav" key="nav">
+  handleSelectFilter = (value, option) => {
+    const optionValue = option.props['data-label'];
+    return optionValue === searchEngine ||
+      optionValue.indexOf(value.toLowerCase()) > -1;
+  }
+
+  render() {
+    const { isFirstScreen, isMoblie } = this.props;
+    const { menuVisible } = this.state;
+    const menuMode = isMoblie ? 'inline' : 'horizontal';
+    const headerClassName = classNames({
+      clearfix: true,
+      'home-nav-white': !isFirstScreen,
+    });
+
+    const menu = [
+      <Button className="header-lang-button" ghost size="small" key="lang">
+        English
+      </Button>,
+      <Menu mode={menuMode} defaultSelectedKeys={['home']} id="nav" key="nav">
         <Menu.Item key="home">
-          <a>首页</a>
+          首页
         </Menu.Item>
-        <Menu.Item key="docs">
-          <a><span>文档</span></a>
+        <Menu.Item key="docs/spec">
+          指引
         </Menu.Item>
-        <Menu.Item key="components">
-          <a>组件</a>
+        <Menu.Item key="docs/react">
+          组件
         </Menu.Item>
-        {
-          menuMode === 'inline' && (
-            <Menu.Item key="preview">
-              <a target="_blank" href="http://preview.pro.ant.design/" rel="noopener noreferrer">
-                预览
-              </a>
-            </Menu.Item>
-          )
-        }
-      </Menu>
-    );
+        <Menu.Item key="docs/pattern">
+          模式
+        </Menu.Item>
+        <Menu.Item key="docs/resource">
+          资源
+        </Menu.Item>
+        <Menu.Item key="pro">
+          <a
+            href="http://pro.ant.design"
+            className="header-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            PRO
+            <span style={{
+              display: 'inline-block', position: 'relative', top: -2, width: 18,
+            }}
+            >
+              <Badge dot />
+            </span>
+          </a>
+        </Menu.Item>
+      </Menu>,
+    ];
 
     return (
-      <div id="header" className="header">
+      <header id="header" className={headerClassName}>
         {menuMode === 'inline' ? (
           <Popover
             overlayClassName="popover-menu"
@@ -63,33 +105,17 @@ class Header extends React.Component {
           </Popover>
         ) : null}
         <Row>
-          <Col xxl={4} xl={5} lg={8} md={8} sm={24} xs={24}>
-            <div id="logo" to="/">
-              <img src={LOGO_URL} alt="logo" />
-              <span>ANT DESIGN PRO</span>
-            </div>
+          <Col lg={4} md={5} sm={24} xs={24}>
+            <a id="logo">
+              <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg" />
+              <span>Ant Design</span>
+            </a>
           </Col>
-          <Col xxl={20} xl={19} lg={16} md={16} sm={0} xs={0}>
-            <div className="header-meta">
-              <div id="preview">
-                <a
-                  id="preview-button"
-                  target="_blank"
-                  href="http://preview.pro.ant.design"
-                  rel="noopener noreferrer"
-                >
-                  <Button icon="eye-o">
-                    预览
-                  </Button>
-                </a>
-              </div>
-              {menuMode === 'horizontal' ? <div id="menu">{menu}</div> : null}
-            </div>
+          <Col lg={20} md={19} sm={0} xs={0}>
+            {menuMode === 'horizontal' ? menu : null}
           </Col>
         </Row>
-      </div>
+      </header>
     );
   }
 }
-
-export default Header;

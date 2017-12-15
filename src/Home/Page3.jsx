@@ -5,23 +5,26 @@ import ScrollOverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import { Icon, Button } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 
-export default function Page1({ isMobile }) {
+export default function Page3({ isMobile }) {
   return (
-    <ScrollOverPack id="page1" className="content-wrapper page">
+    <ScrollOverPack id="page3" className="content-wrapper page">
       <TweenOne
         key="image"
-        className="image1 image-wrapper"
+        className="image3 image-wrapper"
         animation={{ x: 0, opacity: 1, ease: 'easeOutQuad' }}
         style={{ transform: 'translateX(-100px)', opacity: 0 }}
       />
       <QueueAnim
-        type={isMobile ? 'bottom' : 'right'}
         className="text-wrapper"
         key="text"
+        type={isMobile ? 'bottom' : 'right'}
         leaveReverse
+        style={{ top: '40%' }}
       >
-        <h2 key="h2">最佳实践</h2>
-        <p key="p" style={{ maxWidth: 310 }}>近一年的中后台设计实践，积累了大量的优秀案例。</p>
+        <h2 key="h2">丰富的基础组件'</h2>
+        <p key="p" style={{ maxWidth: 280 }}>
+          丰富、灵活、实用的基础组件，为业务产品提供强有力的设计支持。
+        </p>
         <div key="button">
           <a>
             <Button type="primary" size="large">
@@ -34,6 +37,6 @@ export default function Page1({ isMobile }) {
     </ScrollOverPack>
   );
 }
-Page1.propTypes = {
+Page3.propTypes = {
   isMobile: PropTypes.bool,
 };

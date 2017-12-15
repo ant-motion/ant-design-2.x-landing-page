@@ -1,64 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ScrollElement from 'rc-scroll-anim/lib/ScrollElement';
 import GitHubButton from 'react-github-button';
+import { Icon } from 'antd';
 import QueueAnim from 'rc-queue-anim';
-import TweenOne from 'rc-tween-one';
-import { Button } from 'antd';
-import BannerSVGAnim from './component/BannerSVGAnim';
 
-function Banner(props) {
+function typeFunc(a) {
+  if (a.key === 'line') {
+    return 'right';
+  } else if (a.key === 'button') {
+    return 'bottom';
+  }
+  return 'left';
+}
+
+export default function Banner({ onEnterChange }) {
   return (
-    <div className="banner-wrapper">
-      {props.isMobile && (
-        <TweenOne animation={{ opacity: 1 }} className="banner-image-wrapper">
-          <div className="home-banner-image">
-            <img
-              alt="banner"
-              src="https://gw.alipayobjects.com/zos/rmsportal/rqKQOpnMxeJKngVvulsF.svg"
-              width="100%"
-            />
+    <section className="page banner-wrapper">
+      <ScrollElement
+        className="page"
+        id="banner"
+        onChange={({ mode }) => onEnterChange(mode)}
+        playScale={0.9}
+      >
+        <QueueAnim className="banner-text-wrapper" type={typeFunc} delay={300} key="banner">
+          <h2 key="h2">ANT <p>DESIGN</p></h2>
+          <p key="content">一个 UI 设计语言</p>
+          <span className="line" key="line" />
+          <div key="button1" className="start-button clearfix">
+            <a>
+              设计规范
+            </a>
+            <a>
+              开发指引
+            </a>
           </div>
-        </TweenOne>
-      )}
-      <QueueAnim className="banner-title-wrapper" type={props.isMobile ? 'bottom' : 'right'}>
-        <div key="line" className="title-line-wrapper">
-          <div
-            className="title-line"
-            style={{ transform: 'translateX(-64px)' }}
-          />
-        </div>
-        <h1 key="h1">ANT DESIGN PRO</h1>
-        <p key="content">
-          开箱即用的中台前端/设计解决方案
-        </p>
-        <div key="button" className="button-wrapper">
-          <a href="http://preview.pro.ant.design" target="_blank" rel="noopener noreferrer">
-            <Button type="primary">
-              预览
-            </Button>
-          </a>
-          <Button style={{ margin: '0 16px' }} type="primary" ghost>
-            开始使用
-          </Button>
           <GitHubButton
             key="github-button"
             type="stargazers"
             namespace="ant-design"
-            repo="ant-design-pro"
+            repo="ant-design"
           />
-        </div>
-      </QueueAnim>
-      {!props.isMobile && (
-        <TweenOne animation={{ opacity: 1 }} className="banner-image-wrapper">
-          <BannerSVGAnim />
-        </TweenOne>
-      )}
-    </div>
+        </QueueAnim>
+        <Icon type="down" className="down" />
+      </ScrollElement>
+    </section>
   );
 }
-
 Banner.propTypes = {
-  isMobile: PropTypes.bool.isRequired,
+  onEnterChange: PropTypes.func,
 };
-
-export default Banner;
